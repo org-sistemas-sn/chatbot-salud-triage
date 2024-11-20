@@ -12,10 +12,14 @@ app.use(express.json())
 
 app.use(morgan('combined'))
 
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on ${process.env.PORT}`)
 })
 
+app.post('/api/health', (req, res) => {
+  res.json({ message: 'Server is up and running', body: req.body })
+})
 app.use('/api', ChatBotRoutes)
 
 
