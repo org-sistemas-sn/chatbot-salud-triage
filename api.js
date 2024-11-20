@@ -2,12 +2,15 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import ChatBotRoutes from './modules/Chatbot/chatbot.routes.js'
+import morgan from 'morgan'
 
 const app = express()
 
 dotenv.config()
 app.use(cors())
 app.use(express.json())
+
+app.use(morgan('combined'))
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on ${process.env.PORT}`)

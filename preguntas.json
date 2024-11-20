@@ -1,0 +1,632 @@
+[
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 1,
+      "pregunta": "¿Te cuesta respirar o sientes que te falta el aire?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 2,
+      "pregunta": "¿Tienes dolor en el pecho? Si es así, ¿cómo lo describirías?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 3,
+      "pregunta": "¿Tienes fiebre o tuviste fiebre recientemente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 4,
+      "pregunta": "¿Tu respiración ha cambiado? ¿Sientes como un silbido o que respiras rápido?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 5,
+      "pregunta": "¿Tienes tos? ¿Es seca o con flema?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 6,
+      "pregunta": "¿Has notado si tu piel o labios se ven más pálidos o azulados?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 7,
+      "pregunta": "¿Estuviste cerca de alguien con problemas respiratorios o en algún lugar como un hospital?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 8,
+      "pregunta": "¿Tienes alguna enfermedad respiratoria o del corazón, como asma o insuficiencia cardíaca?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 9,
+      "pregunta": "¿Tienes hinchazón en las piernas o en los pies?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 1,
+      "camino": "respiratorio",
+      "nro_pregunta": 10,
+      "pregunta": "¿Aumentaste de peso sin razón o has perdido el apetito?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 1,
+      "pregunta": "¿Sientes dolor o presión en el pecho o en el brazo izquierdo? ¿Cuándo ocurre?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 2,
+      "pregunta": "¿Te falta el aire, especialmente al hacer actividad física o en reposo?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 3,
+      "pregunta": "¿Notas que te cansas más fácilmente que antes?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 4,
+      "pregunta": "¿Has tenido mareos o sensación de desmayo?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 5,
+      "pregunta": "¿Tus pies, tobillos o piernas están hinchados?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 6,
+      "pregunta": "¿Tienes palpitaciones o sientes que tu corazón late muy rápido o irregularmente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 7,
+      "pregunta": "¿Has ganado peso rápidamente sin razón?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 8,
+      "pregunta": "¿Has tenido tos persistente, especialmente cuando estás acostado?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 9,
+      "pregunta": "¿Tienes antecedentes de problemas cardíacos en tu familia?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 2,
+      "camino": "cardiovascular",
+      "nro_pregunta": 10,
+      "pregunta": "¿Fumas, consumes alcohol en exceso o tienes una vida muy sedentaria?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 1,
+      "pregunta": "¿Tienes dolor en el estómago o el abdomen? ¿Dónde lo sientes y cómo es el dolor?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 2,
+      "pregunta": "¿Has tenido náuseas o vómitos recientemente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 3,
+      "pregunta": "¿Has notado cambios en tu apetito, como pérdida de hambre o comer más de lo usual?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 4,
+      "pregunta": "¿Tienes diarrea o estreñimiento? ¿Hace cuánto tiempo?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 5,
+      "pregunta": "¿Has notado sangre en tus heces o que se ven de un color oscuro?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 6,
+      "pregunta": "¿Sientes hinchazón en el abdomen o gases más de lo normal?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 7,
+      "pregunta": "¿Tienes ardor o acidez en el estómago o en la garganta?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 8,
+      "pregunta": "¿Has perdido peso sin querer o razón aparente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 9,
+      "pregunta": "¿Tienes dificultad para tragar alimentos o líquidos?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 3,
+      "camino": "gastroenterológico",
+      "nro_pregunta": 10,
+      "pregunta": "¿Estás tomando algún medicamento que pueda afectar tu estómago o intestinos?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 1,
+      "pregunta": "¿Has tenido dolores de cabeza fuertes o frecuentes?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 2,
+      "pregunta": "¿Has sentido debilidad o pérdida de fuerza en algún brazo o pierna?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 3,
+      "pregunta": "¿Has notado cambios en tu visión, como ver borroso o doble?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 4,
+      "pregunta": "¿Has tenido dificultad para hablar o entender a los demás?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 5,
+      "pregunta": "¿Te has sentido mareado o como si fueras a perder el equilibrio?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 6,
+      "pregunta": "¿Has tenido desmayos o episodios de pérdida de conciencia?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 7,
+      "pregunta": "¿Sientes hormigueo o adormecimiento en alguna parte del cuerpo?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 8,
+      "pregunta": "¿Has tenido problemas recientes para recordar cosas o concentrarte?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 9,
+      "pregunta": "¿Te has sentido más irritable, ansioso o deprimido de lo normal?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 4,
+      "camino": "neurologico",
+      "nro_pregunta": 10,
+      "pregunta": "¿Tomas algún medicamento que pueda afectar tu sistema nervioso?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 1,
+      "pregunta": "¿El niño tiene fiebre? ¿Desde cuándo?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 2,
+      "pregunta": "¿Ha tenido problemas para respirar o parece respirar rápido?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 3,
+      "pregunta": "¿Tiene tos o congestión nasal? ¿Es reciente o persistente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 4,
+      "pregunta": "¿Ha tenido vómitos o diarrea? ¿Cuántas veces?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 5,
+      "pregunta": "¿Ha estado comiendo o bebiendo menos de lo usual?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 6,
+      "pregunta": "¿Ha notado algún sarpullido o cambios en la piel?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 7,
+      "pregunta": "¿El niño se ha quejado de dolor en alguna parte, como estómago, cabeza o garganta?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 8,
+      "pregunta": "¿Ha estado menos activo o más somnoliento de lo normal?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 9,
+      "pregunta": "¿Tiene problemas para orinar o ha cambiado la frecuencia de las veces que orina?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 5,
+      "camino": "pediatrico",
+      "nro_pregunta": 10,
+      "pregunta": "¿Ha estado en contacto con alguien que tenga una infección o alguna enfermedad reciente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 1,
+      "pregunta": "¿Tienes dolor en los ojos o alrededor de ellos?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 2,
+      "pregunta": "¿Tu visión ha cambiado, como ver borroso, doble o manchas?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 3,
+      "pregunta": "¿Tienes enrojecimiento en los ojos o están irritados?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 4,
+      "pregunta": "¿Has notado sensibilidad a la luz más de lo normal?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 5,
+      "pregunta": "¿Te lloran o se secan los ojos con frecuencia?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 6,
+      "pregunta": "¿Tienes comezón en los ojos o sensación de tener algo dentro?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 7,
+      "pregunta": "¿Ves destellos de luz o sombras en el campo visual?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 8,
+      "pregunta": "¿Tienes hinchazón en los párpados o alguna secreción de los ojos?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 9,
+      "pregunta": "¿Has tenido algún golpe o lesión en los ojos recientemente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 6,
+      "camino": "oftalmologico",
+      "nro_pregunta": 10,
+      "pregunta": "¿Usas lentes de contacto o tienes alguna condición previa en los ojos?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 1,
+      "pregunta": "¿Tienes dolor en la zona pélvica o abdominal? ¿Cuándo comenzó?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 2,
+      "pregunta": "¿Tu periodo menstrual ha cambiado, como sangrado más intenso o irregular?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 3,
+      "pregunta": "¿Has tenido sangrado fuera de tu periodo o después de relaciones sexuales?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 4,
+      "pregunta": "¿Notas secreción vaginal anormal en color, olor o cantidad?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 5,
+      "pregunta": "¿Tienes picazón, ardor o incomodidad en la zona genital?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 6,
+      "pregunta": "¿Has tenido relaciones sexuales sin protección recientemente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 7,
+      "pregunta": "¿Sientes dolor durante las relaciones sexuales?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 8,
+      "pregunta": "¿Tienes dificultad o dolor al orinar?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 9,
+      "pregunta": "¿Te sientes más cansada de lo normal o has notado cambios de humor?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 7,
+      "camino": "ginecologico",
+      "nro_pregunta": 10,
+      "pregunta": "¿Estás usando anticonceptivos o algún medicamento que afecte el ciclo menstrual?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 1,
+      "pregunta": "¿Tienes dolor en alguna parte del cuerpo después de una caída o golpe?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 2,
+      "pregunta": "¿Tienes hinchazón, enrojecimiento o moretones en el área afectada?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 3,
+      "pregunta": "¿Puedes mover la parte afectada o sientes rigidez?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 4,
+      "pregunta": "¿Has notado debilidad o pérdida de fuerza en el área afectada?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 5,
+      "pregunta": "¿Sientes hormigueo, adormecimiento o pérdida de sensibilidad en alguna zona?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 6,
+      "pregunta": "¿Tienes alguna herida abierta o cortadura? ¿Está sangrando?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 7,
+      "pregunta": "¿Sientes dolor al caminar, levantar peso o realizar actividades?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 8,
+      "pregunta": "¿Has tenido alguna lesión similar en esa parte del cuerpo antes?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 9,
+      "pregunta": "¿Usas algún aparato ortopédico o tienes una condición previa en el área afectada?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 8,
+      "camino": "traumatológico",
+      "nro_pregunta": 10,
+      "pregunta": "¿Estás tomando algún medicamento para el dolor o inflamación?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 1,
+      "pregunta": "¿Cuánto tiempo llevas con este problema en la piel?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 2,
+      "pregunta": "¿Has notado que la lesión ha cambiado de tamaño, forma o color recientemente?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 3,
+      "pregunta": "¿Tienes algún síntoma asociado, como picazón, dolor, ardor o sangrado?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 4,
+      "pregunta": "¿Has usado algún producto, medicamento o remedio casero en la zona afectada?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 5,
+      "pregunta": "¿Tuviste algún contacto con sustancias o materiales irritantes, como productos químicos o cosméticos nuevos?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 6,
+      "pregunta": "¿Tienes antecedentes personales o familiares de enfermedades en la piel, como psoriasis, dermatitis o cáncer de piel?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 7,
+      "pregunta": "¿Has estado expuesto al sol sin protección en los últimos días o con frecuencia?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 8,
+      "pregunta": "¿Tienes antecedentes de alergias? En caso afirmativo, ¿a qué sustancias?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 9,
+      "pregunta": "¿Estás tomando algún medicamento actualmente? Si es así, ¿cuáles?",
+      "fin": 0
+    },
+    {
+      "nro_camino": 9,
+      "camino": "dermatologico",
+      "nro_pregunta": 10,
+      "pregunta": "¿Has tenido lesiones similares en el pasado? ¿Cuál fue el diagnóstico y tratamiento en esa ocasión?",
+      "fin": 0
+    }
+  ]
