@@ -18,8 +18,10 @@ app.listen(process.env.PORT, () => {
 })
 
 app.post('/api/health', (req, res) => {
-  res.json({ message: 'Server is up and running', body: req.body })
+  console.log(req.body)
+  res.json({ message: 'Server is up and running' })
 })
+
 app.use('/api', ChatBotRoutes)
 
 
