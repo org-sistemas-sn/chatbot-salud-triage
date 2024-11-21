@@ -1,75 +1,65 @@
-import OpenAI from 'openai';
-import dotenv from 'dotenv';
-import Thread from '../Threads/thread.model.js';
-import { sendWhatsAppMessage } from '../../lib/sendWhatsapp.js';
-import Sender from '../Senders/sender.model.js';
+import OpenAI from 'openai'
+import dotenv from 'dotenv'
+import Thread from '../Threads/thread.model.js'
+import { sendWhatsAppMessage } from '../../lib/sendWhatsapp.js'
+import Sender from '../Senders/sender.model.js'
 
-dotenv.config();
+dotenv.config()
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-});
+})
 
-const ASSISTANT_ID = process.env.ASSISTANT_ID; 
+const ASSISTANT_ID = process.env.ASSISTANT_ID
 
 export const healthCheck = (req, res) => {
-  res.json({ message: 'Chatbot is running (v1.0.0)' });
+  res.json({ message: 'Chatbot is running (v1.0.0)' })
 }
 
 export const postMessage = async (req, res) => {
-  const { prompt } = req.body;
-  
+  const { prompt } = req.body
+
   try {
-    const thread = await openai.beta.threads.create();
+    const thread = await openai.beta.threads.create()
 
-    await openai.beta.threads.messages.create(
-      thread.id,
-      { role: "user", content: prompt }
-    );
+    await openai.beta.threads.messages.create(thread.id, {
+      role: 'user',
+      content: prompt,
+    })
 
-    await openai.beta.threads.runs.createAndPoll(
-      thread.id,
-      { assistant_id: ASSISTANT_ID }
-    );
-  
-    const messages = await openai.beta.threads.messages.list(
-      thread.id
-    )
+    await openai.beta.threads.runs.createAndPoll(thread.id, {
+      assistant_id: ASSISTANT_ID,
+    })
+
+    const messages = await openai.beta.threads.messages.list(thread.id)
 
     res.json(messages.data)
-
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message })
   }
 }
 
 export const getThreadMessages = async (req, res) => {
-  const { thread_id } = req.params;
+  const { thread_id } = req.params
 
   try {
-    const threadMessages = await openai.beta.threads.messages.list(
-      thread_id
-    );
+    const threadMessages = await openai.beta.threads.messages.list(thread_id)
 
     res.json(threadMessages.data)
-
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message })
   }
 }
 
 export const killThread = async (req, res) => {
-  const { thread_id } = req.params;
+  const { thread_id } = req.params
 
   try {
-    const thread = await openai.beta.threads.del(
-      thread_id
-    );
+    const thread = await openai.beta.threads.del(thread_id)
 
     res.json(thread)
-
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message })
   }
 }
 
@@ -79,104 +69,109 @@ export const postMessage2 = async (req, res) => {
   const sender = req.body.payload.sender
 
   console.log(req.body)
-  
-  try {
 
+  // Handle initial webhook validation request
+  if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
+    return res.status(200).json({ message: 'Webhook validation successful' })
+  }
+
+  try {
     //buscar usuario
     const senderRecord = await Sender.findOne({
-      where: { phone: sender.phone }
-    });
+      where: { phone: sender.phone },
+    })
 
-    if (!senderRecord) { //si no existe el usuario
+    if (!senderRecord) {
+      //si no existe el usuario
       //crear usuario
       const newSenderRecord = await Sender.create({
         phone: sender.phone,
         name: sender.name,
         country_code: sender.country_code,
-        dial_code: sender.dial_code
-      });
+        dial_code: sender.dial_code,
+      })
 
       //crear thread
-      const thread = await openai.beta.threads.create();
+      const thread = await openai.beta.threads.create()
 
       //guardar thread y usuario en la base de datos
       const newThreadRecord = await Thread.create({
         sender_id: newSenderRecord.id,
-        thread_id: thread.id
-      }); 
+        thread_id: thread.id,
+      })
 
       //agregar mensaje al thread
-      await openai.beta.threads.messages.create(
-        thread.id,
-        { role: "user", content: prompt }
-      );
+      await openai.beta.threads.messages.create(thread.id, {
+        role: 'user',
+        content: prompt,
+      })
 
-      //run thread 
-      await openai.beta.threads.runs.createAndPoll(
-        thread.id,
-        { assistant_id: ASSISTANT_ID }
-      );
+      //run thread
+      await openai.beta.threads.runs.createAndPoll(thread.id, {
+        assistant_id: ASSISTANT_ID,
+      })
 
       //get messages
-      const messages = await openai.beta.threads.messages.list(
-        thread.id
-      )
+      const messages = await openai.beta.threads.messages.list(thread.id)
 
       //enviar mensaje al usuario por wsp
-      sendWhatsAppMessage(newSenderRecord.phone, messages.data[0].content[0].text.value)
-
-    } else { //si existe 
+      sendWhatsAppMessage(
+        newSenderRecord.phone,
+        messages.data[0].content[0].text.value
+      )
+    } else {
+      //si existe
 
       //buscar el thread en la db
       const threadRecord = await Thread.findOne({
-        where: { sender_id: senderRecord.id }
-      });
+        where: { sender_id: senderRecord.id },
+      })
 
-      //buscar thread en openai 
-      const thread = await openai.beta.threads.retrieve(
-        threadRecord.thread_id
-      );
+      //buscar thread en openai
+      const thread = await openai.beta.threads.retrieve(threadRecord.thread_id)
 
       // si el thread no existe crearlo
       if (!thread) {
-        const newThread = await openai.beta.threads.create();
+        const newThread = await openai.beta.threads.create()
 
         //guardar thread en la base de datos
-        await Thread.update({ thread_id: newThread.id }, {
-          where: { sender_id: senderRecord.id }
-        });
-
-        //agregar mensaje al thread
-        await openai.beta.threads.messages.create(
-          newThread.id,
-          { role: "user", content: prompt }
-        );
-
-        //run thread 
-        await openai.beta.threads.runs.createAndPoll(
-          newThread.id,
-          { assistant_id: ASSISTANT_ID }
-        );
-
-        //get messages
-        const messages = await openai.beta.threads.messages.list(
-          newThread.id
+        await Thread.update(
+          { thread_id: newThread.id },
+          {
+            where: { sender_id: senderRecord.id },
+          }
         )
 
-        //enviar mensaje al usuario por wsp
-        sendWhatsAppMessage(senderRecord.phone, messages.data[0].content[0].text.value)
-      } else {
         //agregar mensaje al thread
-        await openai.beta.threads.messages.create(
-          threadRecord.thread_id,
-          { role: "user", content: prompt }
-        );
+        await openai.beta.threads.messages.create(newThread.id, {
+          role: 'user',
+          content: prompt,
+        })
 
         //run thread
-        await openai.beta.threads.runs.createAndPoll(
-          threadRecord.thread_id,
-          { assistant_id: ASSISTANT_ID }
-        );
+        await openai.beta.threads.runs.createAndPoll(newThread.id, {
+          assistant_id: ASSISTANT_ID,
+        })
+
+        //get messages
+        const messages = await openai.beta.threads.messages.list(newThread.id)
+
+        //enviar mensaje al usuario por wsp
+        sendWhatsAppMessage(
+          senderRecord.phone,
+          messages.data[0].content[0].text.value
+        )
+      } else {
+        //agregar mensaje al thread
+        await openai.beta.threads.messages.create(threadRecord.thread_id, {
+          role: 'user',
+          content: prompt,
+        })
+
+        //run thread
+        await openai.beta.threads.runs.createAndPoll(threadRecord.thread_id, {
+          assistant_id: ASSISTANT_ID,
+        })
 
         //get messages
         const messages = await openai.beta.threads.messages.list(
@@ -184,16 +179,17 @@ export const postMessage2 = async (req, res) => {
         )
 
         //enviar mensaje al usuario por wsp
-        sendWhatsAppMessage(senderRecord.phone, messages.data[0].content[0].text.value)
+        sendWhatsAppMessage(
+          senderRecord.phone,
+          messages.data[0].content[0].text.value
+        )
       }
     }
 
     res.sendStatus(200)
-
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message })
   }
-
 }
 
 // thread_qFlpghaKjnljBR6h6Ac7H9N3 old thread to test data persistence
@@ -216,4 +212,3 @@ export const postMessage2 = async (req, res) => {
 //     }
 //   }
 // }
-
