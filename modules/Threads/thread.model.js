@@ -6,6 +6,7 @@ const Thread = sequelize.define('Thread', {
   id: {
     type: DataTypes.STRING,
     allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
   },
   sender_id: {
