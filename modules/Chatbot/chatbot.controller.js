@@ -188,6 +188,7 @@ export const postMessage2 = async (req, res) => {
 
     res.sendStatus(200)
   } catch (error) {
+    console.error(error)
     res.status(500).json({ error: error.message })
   }
 }
