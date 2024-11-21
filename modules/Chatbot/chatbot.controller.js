@@ -13,7 +13,7 @@ const openai = new OpenAI({
 const ASSISTANT_ID = process.env.ASSISTANT_ID; 
 
 export const healthCheck = (req, res) => {
-  res.json({ message: 'Chatbot is running' });
+  res.json({ message: 'Chatbot is running (v1.0.0)' });
 }
 
 export const postMessage = async (req, res) => {
