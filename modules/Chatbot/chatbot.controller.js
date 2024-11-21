@@ -77,6 +77,8 @@ export const postMessage2 = async (req, res) => {
   //only accept text messages
   const prompt = req.body.payload.text
   const sender = req.body.payload.sender
+
+  console.log(req.body)
   
   try {
 
