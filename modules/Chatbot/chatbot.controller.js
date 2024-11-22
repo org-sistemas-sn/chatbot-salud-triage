@@ -3,8 +3,12 @@ import dotenv from 'dotenv'
 import Thread from '../Threads/thread.model.js'
 import { sendWhatsAppMessage } from '../../lib/sendWhatsapp.js'
 import Sender from '../Senders/sender.model.js'
+import chalk from 'chalk'
 
 dotenv.config()
+
+const error = chalk.bold.red
+const success = chalk.bold.green
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -13,9 +17,9 @@ const openai = new OpenAI({
 const ASSISTANT_ID = process.env.ASSISTANT_ID
 
 export const healthCheck = (req, res) => {
+  console.log(success('Chatbot is running (v1.0.0)'))
   res.json({ message: 'Chatbot is running (v1.0.0)' })
 }
-
 
 export const getThreadMessages = async (req, res) => {
   const { thread_id } = req.params
@@ -42,7 +46,7 @@ export const killThread = async (req, res) => {
 }
 
 export const postMessage = async (req, res) => {
-  // Handle initial webhook validation request
+  // Handle initial webhook validation request from gupshup
   if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
     return res.status(200).json({ message: 'Webhook validation successful' })
   }
@@ -50,10 +54,6 @@ export const postMessage = async (req, res) => {
   //only accept text messages
   const prompt = req.body.payload?.payload?.text || null
   const sender = req.body.payload.sender
-
-  console.log(req.body)
-  console.log('prompt: ', prompt)
-
 
   try {
     //buscar usuario
