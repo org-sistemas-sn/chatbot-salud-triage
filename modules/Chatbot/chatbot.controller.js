@@ -9,6 +9,7 @@ dotenv.config()
 
 const error = chalk.bold.red
 const success = chalk.bold.green
+const info = chalk.bold.blue
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -48,6 +49,7 @@ export const killThread = async (req, res) => {
 export const postMessage = async (req, res) => {
   // Handle initial webhook validation request from gupshup
   if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
+    console.log(success('Webhook validation successful'))
     return res.status(200).json({ message: 'Webhook validation successful' })
   }
 
@@ -55,14 +57,19 @@ export const postMessage = async (req, res) => {
   const prompt = req.body.payload?.payload?.text || null
   const sender = req.body.payload.sender
 
+  console.log(info('PROMPT: '), prompt)
+  console.log(info('SENDER: '), sender)
+  
   try {
     //buscar usuario
     const senderRecord = await Sender.findOne({
       where: { phone: sender.phone },
     })
 
+
     if (!senderRecord) {
       //si no existe el usuario
+      console.log(info('No sender found, creating new sender'))
       //crear usuario
       const newSenderRecord = await Sender.create({
         phone: sender.phone,
@@ -73,6 +80,7 @@ export const postMessage = async (req, res) => {
 
       //crear thread
       const thread = await openai.beta.threads.create()
+      console.log(info('New thread created: '), thread.id)
 
       //guardar thread y usuario en la base de datos
       const newThreadRecord = await Thread.create({
@@ -80,16 +88,20 @@ export const postMessage = async (req, res) => {
         thread_id: thread.id,
       })
 
+      console.log(info('New thread record created: '), newThreadRecord)
+
       //agregar mensaje al thread
       await openai.beta.threads.messages.create(thread.id, {
         role: 'user',
         content: prompt,
       })
+      console.log(info('Message added to thread'))
 
       //run thread
       await openai.beta.threads.runs.createAndPoll(thread.id, {
         assistant_id: ASSISTANT_ID,
       })
+      console.log(info('Thread run'))
 
       //get messages
       const messages = await openai.beta.threads.messages.list(thread.id)
@@ -99,19 +111,24 @@ export const postMessage = async (req, res) => {
         newSenderRecord.phone,
         messages.data[0].content[0].text.value
       )
+      console.log(success('Whatsapp message sent to user'))
     } else {
       //si existe
-
+      console.log(success('Sender found: '), senderRecord)
       //buscar el thread en la db
       const threadRecord = await Thread.findOne({
         where: { sender_id: senderRecord.id },
       })
 
+      console.log(success('Thread found: '), threadRecord)
+
       //buscar thread en openai
       const thread = await openai.beta.threads.retrieve(threadRecord.thread_id)
+      console.log(success('Thread found in OpenAI: '), thread)
 
       // si el thread no existe crearlo
       if (!thread) {
+        console.log(info('Thread not found, creating new thread'))
         const newThread = await openai.beta.threads.create()
 
         //guardar thread en la base de datos
@@ -121,17 +138,20 @@ export const postMessage = async (req, res) => {
             where: { sender_id: senderRecord.id },
           }
         )
+        console.log(success('New thread created: '), newThread.id)
 
         //agregar mensaje al thread
         await openai.beta.threads.messages.create(newThread.id, {
           role: 'user',
           content: prompt,
         })
+        console.log(success('Message added to thread'))
 
         //run thread
         await openai.beta.threads.runs.createAndPoll(newThread.id, {
           assistant_id: ASSISTANT_ID,
         })
+        console.log(success('Thread run'))
 
         //get messages
         const messages = await openai.beta.threads.messages.list(newThread.id)
@@ -141,17 +161,20 @@ export const postMessage = async (req, res) => {
           senderRecord.phone,
           messages.data[0].content[0].text.value
         )
+        console.log(success('Whatsapp message sent to user'))
       } else {
         //agregar mensaje al thread
         await openai.beta.threads.messages.create(threadRecord.thread_id, {
           role: 'user',
           content: prompt,
         })
+        console.log(success('Message added to thread'))
 
         //run thread
         await openai.beta.threads.runs.createAndPoll(threadRecord.thread_id, {
           assistant_id: ASSISTANT_ID,
         })
+        console.log(success('Thread run'))
 
         //get messages
         const messages = await openai.beta.threads.messages.list(
@@ -163,6 +186,7 @@ export const postMessage = async (req, res) => {
           senderRecord.phone,
           messages.data[0].content[0].text.value
         )
+        console.log(success('Whatsapp message sent to user'))
       }
     }
 
