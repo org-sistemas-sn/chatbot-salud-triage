@@ -16,6 +16,10 @@ export const healthCheck = (req, res) => {
   res.json({ message: 'Chatbot is running (v1.0.0)' })
 }
 
+export const webhook = async (req, res) => {
+  res.sendStatus(200)
+}
+
 export const postMessage = async (req, res) => {
   const { prompt } = req.body
 
@@ -64,9 +68,6 @@ export const killThread = async (req, res) => {
 }
 
 export const postMessage2 = async (req, res) => {
-
-  console.error(req.body)
-
   // Handle initial webhook validation request
   if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
     return res.status(200).json({ message: 'Webhook validation successful' })
