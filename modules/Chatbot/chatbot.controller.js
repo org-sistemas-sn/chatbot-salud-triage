@@ -65,6 +65,8 @@ export const killThread = async (req, res) => {
 
 export const postMessage2 = async (req, res) => {
 
+  console.log(req.body)
+
   // Handle initial webhook validation request
   if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
     return res.status(200).json({ message: 'Webhook validation successful' })
