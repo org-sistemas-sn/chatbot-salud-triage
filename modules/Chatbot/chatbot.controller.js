@@ -190,7 +190,7 @@ export const postMessage = async (req, res) => {
       }
     }
 
-    res.sendStatus(200)
+    res.status(200)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: error.message })
