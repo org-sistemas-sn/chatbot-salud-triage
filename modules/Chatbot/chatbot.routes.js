@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { healthCheck, postMessage, postMessage2, getThreadMessages, killThread, webhook2 } from './chatbot.controller.js';
+import { healthCheck, getThreadMessages, killThread, webhook2 } from './chatbot.controller.js';
 
 const router = Router();
 
