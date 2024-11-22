@@ -65,7 +65,7 @@ export const killThread = async (req, res) => {
 
 export const postMessage2 = async (req, res) => {
   //only accept text messages
-  const prompt = req.body.payload.payload.text
+  const prompt = req.body.payload.payload.text || null
   const sender = req.body.payload.sender
 
   console.log(req.body)
