@@ -17,7 +17,7 @@ export const healthCheck = (req, res) => {
 }
 
 export const webhook = async (req, res) => {
-  res.sendStatus(200)
+  res.status(200)
 }
 
 export const postMessage = async (req, res) => {
