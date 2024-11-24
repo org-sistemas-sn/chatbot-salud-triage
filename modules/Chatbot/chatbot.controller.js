@@ -80,7 +80,7 @@ export const postMessage = async (req, res) => {
 
       //crear thread
       const thread = await openai.beta.threads.create()
-      console.log(info('New thread created: '), thread.id)
+      console.log(info('New thread created: '), thread)
 
       //guardar thread y usuario en la base de datos
       const newThreadRecord = await Thread.create({

@@ -4,9 +4,8 @@ import Sender from '../Senders/sender.model.js';
 
 const Thread = sequelize.define('Thread', {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
-    autoIncrement: true,
     primaryKey: true,
   },
   sender_id: {
