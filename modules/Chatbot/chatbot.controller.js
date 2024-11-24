@@ -84,8 +84,8 @@ export const postMessage = async (req, res) => {
 
       //guardar thread y usuario en la base de datos
       const newThreadRecord = await Thread.create({
-        sender_id: newSenderRecord.id,
-        thread_id: thread.id,
+        id: thread.id,
+        sender_id: newSenderRecord.id
       })
 
       console.log(info('New thread record created: '), newThreadRecord)
