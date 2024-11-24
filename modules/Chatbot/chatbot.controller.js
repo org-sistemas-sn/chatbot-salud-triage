@@ -47,155 +47,107 @@ export const killThread = async (req, res) => {
 }
 
 export const postMessage = async (req, res) => {
-  // Handle initial webhook validation request from gupshup
+  // Handle webhook validation request
   if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
-    console.log(success('Webhook validation successful'))
-    return res.status(200).json({ message: 'Webhook validation successful' })
+    console.log('Webhook validation successful');
+    return res.status(200).json({ message: 'Webhook validation successful' });
   }
 
-  //only accept text messages
-  const prompt = req.body.payload?.payload?.text || null
-  const sender = req.body.payload.sender
+  // Only accept text messages
+  const prompt = req.body.payload?.payload?.text || null;
+  const sender = req.body.payload.sender;
 
-  console.log(info('PROMPT: '), prompt)
-  console.log(info('SENDER: '), sender)
-  
+  if (!prompt) {
+    return res.status(400).json({ error: 'No text prompt provided' });
+  }
+
+  // Send immediate acknowledgment response
+  res.status(200).json({ message: 'Message received' });
+
+  // Process message asynchronously
   try {
-    //buscar usuario
-    const senderRecord = await Sender.findOne({
-      where: { phone: sender.phone },
-    })
+    console.log('Processing message...');
+    console.log('PROMPT:', prompt);
+    console.log('SENDER:', sender);
 
+    // Check if the sender already exists
+    let senderRecord = await Sender.findOne({ where: { phone: sender.phone } });
 
     if (!senderRecord) {
-      //si no existe el usuario
-      console.log(info('No sender found, creating new sender'))
-      //crear usuario
-      const newSenderRecord = await Sender.create({
+      console.log('No sender found, creating new sender...');
+      senderRecord = await Sender.create({
         phone: sender.phone,
         name: sender.name,
         country_code: sender.country_code,
         dial_code: sender.dial_code,
-      })
+      });
 
-      //crear thread
-      const thread = await openai.beta.threads.create()
-      console.log(info('New thread created: '), thread)
+      const thread = await openai.beta.threads.create();
+      console.log('New thread created:', thread);
 
-      //guardar thread y usuario en la base de datos
-      const newThreadRecord = await Thread.create({
+      await Thread.create({
         id: thread.id,
-        sender_id: newSenderRecord.id
-      })
+        sender_id: senderRecord.id,
+      });
 
-      console.log(info('New thread record created: '), newThreadRecord)
-
-      //agregar mensaje al thread
       await openai.beta.threads.messages.create(thread.id, {
         role: 'user',
         content: prompt,
-      })
-      console.log(info('Message added to thread'))
+      });
 
-      //run thread
-      await openai.beta.threads.runs.createAndPoll(thread.id, {
-        assistant_id: ASSISTANT_ID,
-      })
-      console.log(info('Thread run'))
+      await openai.beta.threads.runs.createAndPoll(thread.id, { assistant_id: ASSISTANT_ID });
 
-      //get messages
-      const messages = await openai.beta.threads.messages.list(thread.id)
+      const messages = await openai.beta.threads.messages.list(thread.id);
+      sendWhatsAppMessage(senderRecord.phone, messages.data[0].content[0].text.value);
 
-      //enviar mensaje al usuario por wsp
-      sendWhatsAppMessage(
-        newSenderRecord.phone,
-        messages.data[0].content[0].text.value
-      )
-      console.log(success('Whatsapp message sent to user'))
+      console.log('WhatsApp message sent to user');
     } else {
-      //si existe
-      console.log(success('Sender found: '), senderRecord)
-      //buscar el thread en la db
-      const threadRecord = await Thread.findOne({
-        where: { sender_id: senderRecord.id },
-      })
+      console.log('Sender found:', senderRecord);
 
-      console.log(success('Thread found: '), threadRecord)
+      let threadRecord = await Thread.findOne({ where: { sender_id: senderRecord.id } });
 
-      //buscar thread en openai
-      const thread = await openai.beta.threads.retrieve(threadRecord.thread_id)
-      console.log(success('Thread found in OpenAI: '), thread)
+      if (!threadRecord) {
+        console.log('No thread found, creating new thread...');
+        const newThread = await openai.beta.threads.create();
 
-      // si el thread no existe crearlo
-      if (!thread) {
-        console.log(info('Thread not found, creating new thread'))
-        const newThread = await openai.beta.threads.create()
+        threadRecord = await Thread.create({
+          id: newThread.id,
+          sender_id: senderRecord.id,
+        });
 
-        //guardar thread en la base de datos
-        await Thread.update(
-          { thread_id: newThread.id },
-          {
-            where: { sender_id: senderRecord.id },
-          }
-        )
-        console.log(success('New thread created: '), newThread.id)
-
-        //agregar mensaje al thread
         await openai.beta.threads.messages.create(newThread.id, {
           role: 'user',
           content: prompt,
-        })
-        console.log(success('Message added to thread'))
+        });
 
-        //run thread
-        await openai.beta.threads.runs.createAndPoll(newThread.id, {
-          assistant_id: ASSISTANT_ID,
-        })
-        console.log(success('Thread run'))
+        await openai.beta.threads.runs.createAndPoll(newThread.id, { assistant_id: ASSISTANT_ID });
 
-        //get messages
-        const messages = await openai.beta.threads.messages.list(newThread.id)
+        const messages = await openai.beta.threads.messages.list(newThread.id);
+        sendWhatsAppMessage(senderRecord.phone, messages.data[0].content[0].text.value);
 
-        //enviar mensaje al usuario por wsp
-        sendWhatsAppMessage(
-          senderRecord.phone,
-          messages.data[0].content[0].text.value
-        )
-        console.log(success('Whatsapp message sent to user'))
+        console.log('WhatsApp message sent to user');
       } else {
-        //agregar mensaje al thread
-        await openai.beta.threads.messages.create(threadRecord.thread_id, {
+        console.log('Thread found:', threadRecord);
+
+        await openai.beta.threads.messages.create(threadRecord.id, {
           role: 'user',
           content: prompt,
-        })
-        console.log(success('Message added to thread'))
+        });
 
-        //run thread
-        await openai.beta.threads.runs.createAndPoll(threadRecord.thread_id, {
-          assistant_id: ASSISTANT_ID,
-        })
-        console.log(success('Thread run'))
+        await openai.beta.threads.runs.createAndPoll(threadRecord.id, { assistant_id: ASSISTANT_ID });
 
-        //get messages
-        const messages = await openai.beta.threads.messages.list(
-          threadRecord.thread_id
-        )
+        const messages = await openai.beta.threads.messages.list(threadRecord.id);
+        sendWhatsAppMessage(senderRecord.phone, messages.data[0].content[0].text.value);
 
-        //enviar mensaje al usuario por wsp
-        sendWhatsAppMessage(
-          senderRecord.phone,
-          messages.data[0].content[0].text.value
-        )
-        console.log(success('Whatsapp message sent to user'))
+        console.log('WhatsApp message sent to user');
       }
     }
-
-    res.status(200)
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: error.message })
+    console.error('Error processing message:', error.message);
+    // Note: No need to send a response here, as it was already sent earlier.
   }
-}
+};
+
 
 // thread_qFlpghaKjnljBR6h6Ac7H9N3 old thread to test data persistence
 
