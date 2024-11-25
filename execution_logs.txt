@@ -1,0 +1,17 @@
+Model: gpt-4o, Execution Time: 10370ms
+Model: gpt-4o-mini, Execution Time: 10676ms
+Model: gpt-4-turbo, Execution Time: 10983ms
+Model: gpt-3.5-turbo, Execution Time: 11002ms
+Model: gpt-4, Execution Time: 11408ms
+Model: gpt-4o-mini-2024-07-18, Execution Time: 9496ms
+Model: gpt-4o-2024-11-20, Execution Time: 10249ms
+Model: gpt-4o-2024-08-06, Execution Time: 14758ms
+Model: gpt-4o-2024-05-13, Execution Time: 11074ms
+Model: gpt-4-turbo-preview, Execution Time: 10230ms
+Model: gpt-4-turbo-2024-04-09, Execution Time: 11218ms
+Model: gpt-4-1106-preview, Execution Time: 12452ms
+Model: gpt-4-0613, Execution Time: 9816ms
+Model: gpt-4-0125-preview, Execution Time: 12562ms
+Model: gpt-3.5-turbo-16k, Execution Time: 10384ms
+Model: gpt-3.5-turbo-1106, Execution Time: 13573ms
+Model: gpt-3.5-turbo-0125, Execution Time: 11635ms
