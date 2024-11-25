@@ -47,11 +47,13 @@ export const killThread = async (req, res) => {
 }
 
 export const postMessage = async (req, res) => {
+  // Handle webhook validation request
   if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
     console.log('Webhook validation successful');
     return res.status(200).json({ message: 'Webhook validation successful' });
   }
 
+  // Only accept text messages
   const prompt = req.body.payload?.payload?.text || null;
   const sender = req.body.payload.sender;
 
@@ -59,74 +61,92 @@ export const postMessage = async (req, res) => {
     return res.status(400).json({ error: 'No text prompt provided' });
   }
 
-  // Acknowledge the request
+  // Send immediate acknowledgment response
   res.status(200).json({ message: 'Message received' });
 
+  // Process message asynchronously
   try {
-    console.time('Total Processing Time');
     console.log('Processing message...');
     console.log('PROMPT:', prompt);
     console.log('SENDER:', sender);
 
-    // Check if sender exists
+    // Check if the sender already exists
     let senderRecord = await Sender.findOne({ where: { phone: sender.phone } });
 
     if (!senderRecord) {
+      console.log('No sender found, creating new sender...');
       senderRecord = await Sender.create({
         phone: sender.phone,
         name: sender.name,
         country_code: sender.country_code,
         dial_code: sender.dial_code,
       });
-    }
 
-    let threadRecord = await Thread.findOne({ where: { sender_id: senderRecord.id } });
-    let threadId;
+      const thread = await openai.beta.threads.create();
+      console.log('New thread created:', thread);
 
-    if (!threadRecord) {
-      console.log('Creating a new thread...');
-      const run = await openai.beta.threads.createAndRun({
-        assistant_id: ASSISTANT_ID,
-        thread: {
-          messages: [{ role: 'user', content: prompt }],
-        },
-      });
-
-      threadId = run.thread_id;
-
-      // Save the new thread in the database
       await Thread.create({
-        id: threadId,
+        id: thread.id,
         sender_id: senderRecord.id,
       });
 
-      // Get the assistant's reply
-      const reply = run.data.messages[0]?.content[0]?.text?.value || 'No response';
-      await sendWhatsAppMessage(senderRecord.phone, reply);
-    } else {
-      console.log('Using existing thread...');
-      threadId = threadRecord.id;
-
-      // Add the message and run the thread in one step
-      const run = await openai.beta.threads.createAndRun({
-        assistant_id: ASSISTANT_ID,
-        thread: {
-          id: threadId,
-          messages: [{ role: 'user', content: prompt }],
-        },
+      await openai.beta.threads.messages.create(thread.id, {
+        role: 'user',
+        content: prompt,
       });
 
-      // Get the assistant's reply
-      const reply = run.data.messages[0]?.content[0]?.text?.value || 'No response';
-      await sendWhatsAppMessage(senderRecord.phone, reply);
-    }
+      await openai.beta.threads.runs.createAndPoll(thread.id, { assistant_id: ASSISTANT_ID });
 
-    console.timeEnd('Total Processing Time');
+      const messages = await openai.beta.threads.messages.list(thread.id);
+      sendWhatsAppMessage(senderRecord.phone, messages.data[0].content[0].text.value);
+
+      console.log('WhatsApp message sent to user');
+    } else {
+      console.log('Sender found:', senderRecord);
+
+      let threadRecord = await Thread.findOne({ where: { sender_id: senderRecord.id } });
+
+      if (!threadRecord) {
+        console.log('No thread found, creating new thread...');
+        const newThread = await openai.beta.threads.create();
+
+        threadRecord = await Thread.create({
+          id: newThread.id,
+          sender_id: senderRecord.id,
+        });
+
+        await openai.beta.threads.messages.create(newThread.id, {
+          role: 'user',
+          content: prompt,
+        });
+
+        await openai.beta.threads.runs.createAndPoll(newThread.id, { assistant_id: ASSISTANT_ID });
+
+        const messages = await openai.beta.threads.messages.list(newThread.id);
+        sendWhatsAppMessage(senderRecord.phone, messages.data[0].content[0].text.value);
+
+        console.log('WhatsApp message sent to user');
+      } else {
+        console.log('Thread found:', threadRecord);
+
+        await openai.beta.threads.messages.create(threadRecord.id, {
+          role: 'user',
+          content: prompt,
+        });
+
+        await openai.beta.threads.runs.createAndPoll(threadRecord.id, { assistant_id: ASSISTANT_ID });
+
+        const messages = await openai.beta.threads.messages.list(threadRecord.id);
+        sendWhatsAppMessage(senderRecord.phone, messages.data[0].content[0].text.value);
+
+        console.log('WhatsApp message sent to user');
+      }
+    }
   } catch (error) {
     console.error('Error processing message:', error.message);
+    // Note: No need to send a response here, as it was already sent earlier.
   }
 };
-
 
 
 // thread_qFlpghaKjnljBR6h6Ac7H9N3 old thread to test data persistence
