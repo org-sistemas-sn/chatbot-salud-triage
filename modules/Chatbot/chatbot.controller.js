@@ -59,7 +59,8 @@ export const postMessage = async (req, res) => {
     return res.status(400).json({ error: 'No text prompt provided' });
   }
 
-  res.status(200).json({ message: 'Message received' }); // Acknowledge request
+  // Acknowledge the request
+  res.status(200).json({ message: 'Message received' });
 
   try {
     console.time('Total Processing Time');
@@ -67,6 +68,7 @@ export const postMessage = async (req, res) => {
     console.log('PROMPT:', prompt);
     console.log('SENDER:', sender);
 
+    // Check if sender exists
     let senderRecord = await Sender.findOne({ where: { phone: sender.phone } });
 
     if (!senderRecord) {
@@ -79,32 +81,43 @@ export const postMessage = async (req, res) => {
     }
 
     let threadRecord = await Thread.findOne({ where: { sender_id: senderRecord.id } });
+    let threadId;
 
     if (!threadRecord) {
-      console.time('Create and Run Thread');
-      const runResponse = await openai.beta.threads.runs.createAndPoll({
+      console.log('Creating a new thread...');
+      const run = await openai.beta.threads.createAndRun({
         assistant_id: ASSISTANT_ID,
-        messages: [{ role: 'user', content: prompt }],
+        thread: {
+          messages: [{ role: 'user', content: prompt }],
+        },
       });
-      console.timeEnd('Create and Run Thread');
 
-      const threadId = runResponse.data.thread_id;
+      threadId = run.data.thread_id;
 
-      threadRecord = await Thread.create({
+      // Save the new thread in the database
+      await Thread.create({
         id: threadId,
         sender_id: senderRecord.id,
       });
 
-      const reply = runResponse.data.messages[0]?.content[0]?.text?.value || 'No response';
+      // Get the assistant's reply
+      const reply = run.data.messages[0]?.content[0]?.text?.value || 'No response';
       await sendWhatsAppMessage(senderRecord.phone, reply);
     } else {
-      console.time('Add Message and Run Existing Thread');
-      const runResponse = await openai.beta.threads.runs.createAndPoll(threadRecord.id, {
-        messages: [{ role: 'user', content: prompt }],
-      });
-      console.timeEnd('Add Message and Run Existing Thread');
+      console.log('Using existing thread...');
+      threadId = threadRecord.id;
 
-      const reply = runResponse.data.messages[0]?.content[0]?.text?.value || 'No response';
+      // Add the message and run the thread in one step
+      const run = await openai.beta.threads.createAndRun({
+        assistant_id: ASSISTANT_ID,
+        thread: {
+          id: threadId,
+          messages: [{ role: 'user', content: prompt }],
+        },
+      });
+
+      // Get the assistant's reply
+      const reply = run.data.messages[0]?.content[0]?.text?.value || 'No response';
       await sendWhatsAppMessage(senderRecord.phone, reply);
     }
 
