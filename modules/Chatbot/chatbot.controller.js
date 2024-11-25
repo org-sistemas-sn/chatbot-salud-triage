@@ -57,6 +57,10 @@ export const postMessage = async (req, res) => {
   const prompt = req.body.payload?.payload?.text || null;
   const sender = req.body.payload.sender;
 
+  let request = req.body 
+
+  console.log(error('REQUEST:'), request)
+
   if (!prompt) {
     return res.status(400).json({ error: 'No text prompt provided' });
   }
