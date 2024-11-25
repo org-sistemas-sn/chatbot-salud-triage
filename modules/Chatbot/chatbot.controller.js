@@ -92,7 +92,7 @@ export const postMessage = async (req, res) => {
         },
       });
 
-      threadId = run.data.thread_id;
+      threadId = run.thread_id;
 
       // Save the new thread in the database
       await Thread.create({
