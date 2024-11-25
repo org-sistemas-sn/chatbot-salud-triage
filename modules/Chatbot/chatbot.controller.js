@@ -5,11 +5,20 @@ import { sendWhatsAppMessage } from '../../lib/sendWhatsapp.js'
 import Sender from '../Senders/sender.model.js'
 import chalk from 'chalk'
 
+//------------------------------------------------------------------------------------------
+// Handle webhook validation request
+// this option should only be added at the top of the postMessage endpoint
+// when changin the callback url from gupshup
+// the condition should not be added to avoid innecesary webook validation :P
+//------------------------------------------------------------------------------------------
+
+// if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
+//   console.log('Webhook validation successful');
+//   return res.status(200).json({ message: 'Webhook validation successful' });
+// }
+
 dotenv.config()
 
-const error = chalk.bold.red
-const success = chalk.bold.green
-const info = chalk.bold.blue
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -42,35 +51,28 @@ export const postMessage = async (req, res) => {
       })
     }
 
-    console.log(info('Sender:', senderRecord))
-
     let threadRecord = await Thread.findOne({
       where: { sender_id: senderRecord.id },
     })
 
     if (!threadRecord) {
       threadRecord = await openai.beta.threads.create()
-      console.log('New thread created:', threadRecord.id)
 
       await Thread.create({
         id: threadRecord.id,
         sender_id: senderRecord.id,
       })
-      console.log(info('Thread record save to db:', threadRecord.id))
     }
 
     await openai.beta.threads.messages.create(threadRecord.id, {
       role: 'user',
       content: prompt,
     })
-    console.log(info('Message sent to thread:', prompt))
 
     await openai.beta.threads.runs.createAndPoll(
       threadRecord.id,
       { assistant_id: ASSISTANT_ID }
     )
-
-    console.log(info('Message processed by OpenAI'))
 
     const messages = await openai.beta.threads.messages.list(threadRecord.id)
     let response = messages.data[0].content[0].text.value
@@ -82,8 +84,3 @@ export const postMessage = async (req, res) => {
   }
 }
 
-// Handle webhook validation request
-// if (req.body.type === 'user-event' && req.body.payload?.type === 'sandbox-start') {
-//   console.log('Webhook validation successful');
-//   return res.status(200).json({ message: 'Webhook validation successful' });
-// }
