@@ -42,7 +42,6 @@ export const postMessage = async (req, res) => {
     let senderRecord = await Sender.findOne({ where: { phone: sender.phone } })
 
     if (!senderRecord) {
-      console.log(info('No sender found, creating new sender...'))
       senderRecord = await Sender.create({
         phone: sender.phone,
         name: sender.name,
