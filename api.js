@@ -5,6 +5,7 @@ import ChatBotRoutes from './modules/Chatbot/chatbot.routes.js'
 import morgan from 'morgan'
 import sequelize from './config/database.js'
 import './config/models.js'
+import './tracing.js'
 
 const app = express()
 
